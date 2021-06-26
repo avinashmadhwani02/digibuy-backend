@@ -71,4 +71,35 @@ router.post('/createUrl', async (req, res) => {
 	res.send("Error in creating a url");
 })
 
+router.post('/getPageData', async (req, res) => {
+	try {
+		const { url } = req.body;
+
+		if(url) {
+			const urlResource = await Url.findOne({ url });
+			if(urlResource) {
+				const { pageId } = urlResource;;
+				const page = await Page.findOne({ pageId });
+				if(page) {
+					const { components, pageData } = page;
+					res.send({
+						components: components ? JSON.parse(components) : [],
+						pageData: pageData ? JSON.parse(pageData) : undefined
+					})
+				} else {
+					res.send("Page not found");
+				}
+			} else {
+				res.send("Url not found");
+			}
+		} else {
+			res.send("url is mandatory");
+		}
+		
+	} catch(err) {
+		console.log("Error ", err);
+	}
+	res.send("Error in fetching page data");
+})
+
 module.exports = router;
