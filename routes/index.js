@@ -82,6 +82,17 @@ router.post('/createUrl', async (req, res) => {
 	res.send("Error in creating a url");
 })
 
+router.get('/getUrls', async (req, res) => {
+	
+	try {
+		const urls = await Url.find();
+		res.send(urls)
+	} catch (err) {
+
+	}
+	res.send('Error fetching page');
+})
+
 router.post('/getPageData', async (req, res) => {
 	try {
 		const { url } = req.body;
